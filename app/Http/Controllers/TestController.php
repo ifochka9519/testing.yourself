@@ -47,7 +47,8 @@ class TestController extends Controller
     public function testing($id)
     {
         $test = Test::find($id);
-        return view('testing')->with('test',$test);
+        $answers_array = null;
+        return view('testing')->with(['test'=>$test, 'answers_array'=>$answers_array]);
     }
 
     public function add_question(Request $request)
@@ -118,5 +119,44 @@ class TestController extends Controller
         $id = $test->id;
         $test = Test::find($id);
         return view('test')->with('test',$test);
+    }
+
+    public function testing_engine($id)
+    {
+        $test = Test::find($id);
+        $questions = DB::table('questions')->where('test_id', '=', $test->id)->lockForUpdate()->get();
+
+        $answers_array = [];
+        $right = 0;
+
+        foreach ($questions as $question){
+            $answer = DB::table('answers')->where('question_id', '=', $question->id)->where('is_true', '=', true)->lockForUpdate()->first();
+
+            if (isset($_POST[$answer->id])) {
+
+                $answers_array[$question->id] = true;
+                $right++;
+
+            } else {
+
+                $answers_array[$question->id] = false;
+            }
+
+        }
+
+        $all = count($answers_array);
+
+        $result =  (double) 100 * $right / $all;
+
+        $test->last_result = $result;
+        $test->last_passing_the_test = date('Y-m-d H:i:s');
+
+        if( $test->best_result < $test->last_result){
+            $test->best_result = (int) $test->last_result;
+        }
+        $test->save();
+
+
+        return view('testing')->with(['test'=>$test, 'answers_array'=>$answers_array]);
     }
 }

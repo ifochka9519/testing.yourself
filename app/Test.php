@@ -17,4 +17,10 @@ class Test extends Model
     {
         return $this->hasMany('App\Question');
     }
+
+    public function questions_test()
+    {
+        $result = $this->questions()->inRandomOrder();
+        return $result;
+    }
 }

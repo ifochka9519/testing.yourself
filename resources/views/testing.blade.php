@@ -27,38 +27,59 @@ test.blade.php
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <form method="post" action="{{ route('engine_test',['id'=>$test->id])}}">
                             <ul class="fh5co-post">
-                                @foreach ($test->questions as $question)
+                                @foreach ($test->questions_test as $question)
+                                    <input type="hidden" name="{{$question->id}}">
                                     <li>
-                                        <a href="#">
+
                                        {{-- <div class="fh5co-post-media"></div>--}}
                                             <div class="fh5co-post-blurb">
-                                                <h3>{{$question->content}}</h3><br>
-
                                                 <div class="row">
-                                                    <div class="col-md-1"></div>
-                                                    <div class="col-md-10">
+                                                    @if( count($answers_array)>0)
+                                                        @if($answers_array[$question->id] == true)
+                                                            <div class="col-md-4"><p class="alert-success">True</p></div>
+                                                            @else
+                                                            <div class="col-md-4"><p class="alert-danger">False</p></div>
+                                                            @endif
+                                                        @else
+                                                        <div class="col-md-4"></div>
+                                                    @endif
+                                                    <div class="col-md-3"><h3>{{$question->content}}</h3><br></div>
+                                                </div>
+                                                <div class="row">
                                                         <ul class="fh5co-list-check">
-                                                            @foreach($question->answers as $answer)
-                                                                <input title="answer" type="checkbox" name="vehicle" value="{{$answer->id}}">{{$answer->content}}<br>
+                                                            @foreach($question->answers_test as $answer)
+
+                                                                <div class="col-md-3">
+                                                                <p><input title="answer" type="checkbox" name="{{$answer->id}}" value="{{$answer->id}}">  {{$answer->content}}</p><br>
+                                                                </div>
                                                             @endforeach
+
+
+
                                                         </ul>
-                                                    </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-md-11"></div>
                                                     <div class="col-md-1">
-                                                        <a href="{{ route('edit_test',['id'=>$question->id])}}">Submit</a>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </a>
+
                                     </li>
 
                                 @endforeach
-
+                                    @if( count($answers_array)>0)
+                                    @else
+                                        <button type="submit">Submit</button>
+                                    @endif
                             </ul>
-
+                    {{csrf_field()}}
+                </form>
+                @if( count($answers_array)>0)
+                    <a href="{{route('all')}}">Back</a>
+                @endif
             </div>
 
 

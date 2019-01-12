@@ -34,7 +34,8 @@
                                        {{-- <div class="fh5co-post-media"></div>--}}
                                             <div class="fh5co-post-blurb">
                                                 <h3>{{$test->title}}</h3>
-                                                <span class="fh5co-post-meta">{{$test->updated_at}}</span>
+                                                <span class="fh5co-post-meta">Best result: <b>{{$test->best_result}}%</b></span>
+                                                <span class="fh5co-post-meta">Last passing: <b>{{$test->updated_at}}</b></span>
                                                 <a href="{{ route('add',['id'=>$test->id])}}">Add</a>
                                             </div>
                                         </a>

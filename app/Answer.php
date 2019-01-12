@@ -13,4 +13,11 @@ class Answer extends Model
     {
         return $this->belongsTo('App\Question');
     }
+
+    public function toArray()
+    {
+        $attributes = $this->attributesToArray();
+
+        return array_merge($attributes, $this->relationsToArray());
+    }
 }

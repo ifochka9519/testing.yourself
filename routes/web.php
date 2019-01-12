@@ -42,6 +42,8 @@ Route::post('add_question', 'TestController@add_question' )->name('add_question'
 Route::post('save_question', 'TestController@save_question' )->name('save_question');
 Route::get('testing/{id}', 'TestController@testing' )->name('testing');
 
+Route::post('testing/{id}', 'TestController@testing_engine' )->name('engine_test');
+
 
 
 Route::get('login', function () {
